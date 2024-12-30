@@ -2,7 +2,6 @@ package io.github.tayluansantos.expense_tracker_api.controller;
 
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
-import io.github.tayluansantos.expense_tracker_api.model.User;
 import io.github.tayluansantos.expense_tracker_api.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +35,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@RequestBody User user, @PathVariable Long id){
-        return ResponseEntity.ok().body(userService.update(user,id));
+    public ResponseEntity<UserResponseDto> update(@RequestBody UserRequestDto userRequest, @PathVariable Long id){
+        return ResponseEntity.ok().body(userService.update(userRequest,id));
     }
 
     @DeleteMapping("/{id}")

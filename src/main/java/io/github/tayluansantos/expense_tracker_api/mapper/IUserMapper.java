@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface IUserMapper {
 
-    UserResponseDto userToUserDto(User user);
+    UserResponseDto  userToUserDto(User user);
     User userDtoToUser(UserRequestDto user);
 
     List<UserResponseDto> convertListEntityToListDto(Iterable<User> propostas);

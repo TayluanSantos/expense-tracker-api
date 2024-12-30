@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IUserService {
     UserResponseDto save(UserRequestDto user);
-    User update(User user, Long id);
+    UserResponseDto update(UserRequestDto userRequestDto, Long id);
     UserResponseDto findById(Long id);
     List<UserResponseDto> findAll();
     void delete(Long id);

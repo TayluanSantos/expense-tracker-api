@@ -34,14 +34,16 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public User update(User userRequest, Long id) {
+    public UserResponseDto update(UserRequestDto userRequest, Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found."));
-        user.setName(userRequest.getName());
-        user.setEmail(userRequest.getEmail());
-        user.setPassword(userRequest.getPassword());
+        user.setName(userRequest.name());
+        user.setEmail(userRequest.email());
+        user.setPassword(userRequest.password());
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return userMapper.userToUserDto(user);
     }
 
     @Override

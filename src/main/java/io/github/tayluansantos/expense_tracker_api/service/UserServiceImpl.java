@@ -2,6 +2,7 @@ package io.github.tayluansantos.expense_tracker_api.service;
 
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
+import io.github.tayluansantos.expense_tracker_api.exception.ResourceNotFoundException;
 import io.github.tayluansantos.expense_tracker_api.mapper.IUserMapper;
 import io.github.tayluansantos.expense_tracker_api.model.User;
 import io.github.tayluansantos.expense_tracker_api.repository.UserRepository;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements IUserService{
     @Override
     public UserResponseDto update(UserRequestDto userRequest, Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot found user with id: " + id));
         user.setName(userRequest.name());
         user.setEmail(userRequest.email());
         user.setPassword(userRequest.password());
@@ -49,7 +50,7 @@ public class UserServiceImpl implements IUserService{
     @Override
     public UserResponseDto findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot found user with id: " + id));
         return userMapper.userToUserDto(user);
     }
 
@@ -61,7 +62,7 @@ public class UserServiceImpl implements IUserService{
     @Override
     public void delete(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot found user with id: " + id));
         userRepository.delete(user);
     }
 }

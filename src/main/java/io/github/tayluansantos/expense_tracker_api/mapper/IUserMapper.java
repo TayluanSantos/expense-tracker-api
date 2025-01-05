@@ -4,15 +4,16 @@ import io.github.tayluansantos.expense_tracker_api.dto.user.UserRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
 import io.github.tayluansantos.expense_tracker_api.model.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = IExpenseMapper.class)
 public interface IUserMapper {
 
-    UserResponseDto  userToUserDto(User user);
-    User userDtoToUser(UserRequestDto user);
+    UserResponseDto userToUserDto(User user);
 
-    List<UserResponseDto> convertListEntityToListDto(Iterable<User> users);
+    User userDtoToUser(UserRequestDto userRequestDto);
 
+    List<UserResponseDto> convertListEntityToListDto(Iterable<User> expenses);
 }

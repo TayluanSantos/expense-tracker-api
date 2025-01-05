@@ -8,7 +8,7 @@ import java.util.List;
 public interface IExpenseService {
     List<ExpenseResponseDto> findAll();
     ExpenseResponseDto findById(Long id);
-    ExpenseResponseDto save(ExpenseRequestDto expenseRequestDto);
+    ExpenseResponseDto save(Long id,ExpenseRequestDto expenseRequestDto);
     ExpenseResponseDto update(ExpenseRequestDto expenseRequestDto,Long id);
     void delete(Long id);
 }

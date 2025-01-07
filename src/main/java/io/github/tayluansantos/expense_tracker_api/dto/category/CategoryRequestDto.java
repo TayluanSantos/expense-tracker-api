@@ -1,4 +1,6 @@
 package io.github.tayluansantos.expense_tracker_api.dto.category;
 
-public record CategoryRequestDto(String name,String description) {
+import jakarta.validation.constraints.NotNull;
+
+public record CategoryRequestDto(@NotNull String name, String description) {
 }

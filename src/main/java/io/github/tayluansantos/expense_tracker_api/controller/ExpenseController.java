@@ -18,9 +18,9 @@ public class ExpenseController {
     @Autowired
     private IExpenseService expenseService;
 
-    @PostMapping("/user/{id}")
-    public ResponseEntity<ExpenseResponseDto> save(@PathVariable Long id, @RequestBody @Valid ExpenseRequestDto expenseRequest){
-        return ResponseEntity.status(HttpStatus.CREATED).body(expenseService.save(id,expenseRequest));
+    @PostMapping
+    public ResponseEntity<ExpenseResponseDto> save(@RequestBody @Valid ExpenseRequestDto expenseRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(expenseService.save(expenseRequest));
     }
 
     @GetMapping("/{id}")

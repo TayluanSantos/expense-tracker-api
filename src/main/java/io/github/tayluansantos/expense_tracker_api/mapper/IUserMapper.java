@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",uses = IExpenseMapper.class)
+@Mapper(componentModel = "spring",uses = {IExpenseMapper.class,ICategoryMapper.class})
 public interface IUserMapper {
 
     UserResponseDto userToUserDto(User user);

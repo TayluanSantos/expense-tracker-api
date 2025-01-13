@@ -4,8 +4,10 @@ import io.github.tayluansantos.expense_tracker_api.dto.expense.ExpenseRequestDto
 import io.github.tayluansantos.expense_tracker_api.dto.expense.ExpenseResponseDto;
 import io.github.tayluansantos.expense_tracker_api.exception.ResourceNotFoundException;
 import io.github.tayluansantos.expense_tracker_api.mapper.IExpenseMapper;
+import io.github.tayluansantos.expense_tracker_api.model.Category;
 import io.github.tayluansantos.expense_tracker_api.model.Expense;
 import io.github.tayluansantos.expense_tracker_api.model.User;
+import io.github.tayluansantos.expense_tracker_api.repository.CategoryRepository;
 import io.github.tayluansantos.expense_tracker_api.repository.ExpenseRepository;
 import io.github.tayluansantos.expense_tracker_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class ExpenseServiceImpl implements IExpenseService{
     @Autowired
     private IExpenseMapper expenseMapper;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public List<ExpenseResponseDto> findAll() {
         return expenseMapper.convertListEntityToListDto(expenseRepository.findAll());
@@ -38,17 +43,20 @@ public class ExpenseServiceImpl implements IExpenseService{
     }
 
     @Override
-    public ExpenseResponseDto save(Long id, ExpenseRequestDto expenseRequest) {
+    public ExpenseResponseDto save(ExpenseRequestDto expenseRequest) {
 
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(expenseRequest.userId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 
+        Category category = categoryRepository.findById(expenseRequest.categoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found."));
+
         Expense expense = expenseMapper.convertToEntity(expenseRequest);
+
         expense.setUser(user);
+        expense.setCategory(category);
 
-        expenseRepository.save(expense);
-
-        return expenseMapper.convertToDto(expense);
+        return expenseMapper.convertToDto(expenseRepository.save(expense));
     }
 
     @Override

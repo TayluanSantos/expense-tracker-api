@@ -13,6 +13,7 @@ import io.github.tayluansantos.expense_tracker_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,6 +37,13 @@ public class ExpenseServiceImpl implements IExpenseService{
     @Override
     public List<ExpenseResponseDto> findAll() {
         return expenseMapper.convertListEntityToListDto(expenseRepository.findAll());
+    }
+
+    @Override
+    public List<ExpenseResponseDto> findAllByDateRange(LocalDate startDate, LocalDate endDate) {
+        List<Expense> expenseList =
+                expenseRepository.findAllByDateRange(startDate, endDate);
+        return expenseMapper.convertListEntityToListDto(expenseList);
     }
 
     @Override

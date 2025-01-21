@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -37,6 +38,16 @@ public class ExpenseController {
     public ResponseEntity<List<ExpenseResponseDto>> findAll () {
         return ResponseEntity.status(HttpStatus.OK).body(expenseService.findAll());
     }
+
+    @GetMapping("/search-by-date")
+    public ResponseEntity<List<ExpenseResponseDto>> findByDate (@RequestParam("startDate") String startDate,
+                                                                @RequestParam("endDate") String endDate) {
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+
+        return ResponseEntity.status(HttpStatus.OK).body(expenseService.findAllByDateRange(start,end));
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponseDto> update(@RequestBody ExpenseRequestDto expenseRequest,

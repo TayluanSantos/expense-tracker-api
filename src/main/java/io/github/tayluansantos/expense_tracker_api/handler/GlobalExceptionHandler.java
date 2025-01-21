@@ -1,5 +1,6 @@
 package io.github.tayluansantos.expense_tracker_api.handler;
 
+import io.github.tayluansantos.expense_tracker_api.exception.EmailAlreadyExistException;
 import io.github.tayluansantos.expense_tracker_api.exception.ErrorResponse;
 import io.github.tayluansantos.expense_tracker_api.exception.FieldError;
 import io.github.tayluansantos.expense_tracker_api.exception.ResourceNotFoundException;
@@ -25,6 +26,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleResourceNotFoundException(ResourceNotFoundException ex){
         return ErrorResponse.defaultMessage(HttpStatus.NOT_FOUND.value(),ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailAlreadyExistException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleEmailAlreadyExistException(EmailAlreadyExistException ex){
+        return ErrorResponse.defaultMessage(HttpStatus.BAD_REQUEST.value(),ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

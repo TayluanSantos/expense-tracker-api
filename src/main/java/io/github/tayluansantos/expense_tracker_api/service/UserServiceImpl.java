@@ -2,6 +2,7 @@ package io.github.tayluansantos.expense_tracker_api.service;
 
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
+import io.github.tayluansantos.expense_tracker_api.exception.EmailAlreadyExistException;
 import io.github.tayluansantos.expense_tracker_api.exception.ResourceNotFoundException;
 import io.github.tayluansantos.expense_tracker_api.mapper.IUserMapper;
 import io.github.tayluansantos.expense_tracker_api.model.User;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements IUserService{
     public UserResponseDto save(UserRequestDto userRequest) {
 
         if(userRepository.findByEmail(userRequest.email()) != null) {
-            throw new RuntimeException("This email already exist.");
+            throw new EmailAlreadyExistException("This email already exist.");
         }
 
         User user = userMapper.userDtoToUser(userRequest);

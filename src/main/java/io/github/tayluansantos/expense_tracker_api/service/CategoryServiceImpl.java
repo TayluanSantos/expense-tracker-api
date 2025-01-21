@@ -14,12 +14,14 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements ICategoryService{
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final ICategoryMapper categoryMapper;
 
-    @Autowired
-    private ICategoryMapper categoryMapper;
-
+    public CategoryServiceImpl(CategoryRepository categoryRepository,
+                               ICategoryMapper categoryMapper) {
+        this.categoryRepository = categoryRepository;
+        this.categoryMapper = categoryMapper;
+    }
 
     @Override
     public List<CategoryResponseDto> findAll() {

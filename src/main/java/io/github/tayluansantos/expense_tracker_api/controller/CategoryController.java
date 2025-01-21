@@ -18,8 +18,11 @@ import java.util.List;
 @RequestMapping("/categories")
 public class CategoryController {
 
-    @Autowired
-    private ICategoryService categoryService;
+    private final ICategoryService categoryService;
+
+    public CategoryController(ICategoryService categoryService){
+        this.categoryService = categoryService;
+    }
 
     @PostMapping
     public ResponseEntity<CategoryResponseDto> save(@RequestBody @Valid CategoryRequestDto categoryRequestDto){

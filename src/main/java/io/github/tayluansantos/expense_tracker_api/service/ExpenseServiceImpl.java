@@ -18,17 +18,20 @@ import java.util.List;
 @Service
 public class ExpenseServiceImpl implements IExpenseService{
 
-    @Autowired
-    private ExpenseRepository expenseRepository;
+    private final ExpenseRepository expenseRepository;
+    private final UserRepository userRepository;
+    private final IExpenseMapper expenseMapper;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private IExpenseMapper expenseMapper;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
+    public ExpenseServiceImpl(ExpenseRepository expenseRepository,
+                              UserRepository userRepository,
+                              IExpenseMapper expenseMapper,
+                              CategoryRepository categoryRepository) {
+        this.expenseRepository = expenseRepository;
+        this.userRepository = userRepository;
+        this.expenseMapper = expenseMapper;
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public List<ExpenseResponseDto> findAll() {

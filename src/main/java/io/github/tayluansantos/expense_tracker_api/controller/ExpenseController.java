@@ -2,6 +2,7 @@ package io.github.tayluansantos.expense_tracker_api.controller;
 
 import io.github.tayluansantos.expense_tracker_api.dto.expense.ExpenseRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.expense.ExpenseResponseDto;
+import io.github.tayluansantos.expense_tracker_api.service.ICategoryService;
 import io.github.tayluansantos.expense_tracker_api.service.IExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,11 @@ import java.util.List;
 @RequestMapping("/expenses")
 public class ExpenseController {
 
-    @Autowired
-    private IExpenseService expenseService;
+    private final IExpenseService expenseService;
+
+    public ExpenseController(IExpenseService expenseService){
+        this.expenseService = expenseService;
+    }
 
     @PostMapping
     public ResponseEntity<ExpenseResponseDto> save(@RequestBody @Valid ExpenseRequestDto expenseRequest){

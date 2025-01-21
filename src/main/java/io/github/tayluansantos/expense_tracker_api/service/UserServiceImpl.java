@@ -14,11 +14,14 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements IUserService{
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final IUserMapper userMapper;
 
-    @Autowired
-    private IUserMapper userMapper;
+    public UserServiceImpl(UserRepository userRepository,
+                           IUserMapper userMapper){
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
 
     @Override
     public UserResponseDto save(UserRequestDto userRequest) {

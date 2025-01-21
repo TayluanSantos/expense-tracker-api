@@ -2,6 +2,7 @@ package io.github.tayluansantos.expense_tracker_api.controller;
 
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
+import io.github.tayluansantos.expense_tracker_api.service.ICategoryService;
 import io.github.tayluansantos.expense_tracker_api.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,11 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private IUserService userService;
+    private final IUserService userService;
+
+    public UserController(IUserService userService){
+        this.userService = userService;
+    }
 
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> findAll(){

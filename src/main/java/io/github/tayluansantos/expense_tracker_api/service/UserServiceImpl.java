@@ -8,6 +8,7 @@ import io.github.tayluansantos.expense_tracker_api.mapper.IUserMapper;
 import io.github.tayluansantos.expense_tracker_api.model.User;
 import io.github.tayluansantos.expense_tracker_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +18,13 @@ public class UserServiceImpl implements IUserService{
 
     private final UserRepository userRepository;
     private final IUserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository,
-                           IUserMapper userMapper){
+                           IUserMapper userMapper,PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class UserServiceImpl implements IUserService{
         }
 
         User user = userMapper.userDtoToUser(userRequest);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
         return userMapper.userToUserDto(user);

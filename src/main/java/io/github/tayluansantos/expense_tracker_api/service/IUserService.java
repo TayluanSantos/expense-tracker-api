@@ -1,5 +1,6 @@
 package io.github.tayluansantos.expense_tracker_api.service;
 
+import io.github.tayluansantos.expense_tracker_api.dto.user.UserLoginDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
 

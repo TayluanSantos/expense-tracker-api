@@ -1,5 +1,6 @@
 package io.github.tayluansantos.expense_tracker_api.service;
 
+import io.github.tayluansantos.expense_tracker_api.dto.user.UserLoginDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
 import io.github.tayluansantos.expense_tracker_api.exception.EmailAlreadyExistException;
@@ -7,6 +8,9 @@ import io.github.tayluansantos.expense_tracker_api.exception.ResourceNotFoundExc
 import io.github.tayluansantos.expense_tracker_api.mapper.IUserMapper;
 import io.github.tayluansantos.expense_tracker_api.model.UserModel;
 import io.github.tayluansantos.expense_tracker_api.repository.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +22,14 @@ public class UserServiceImpl implements IUserService{
     private final UserRepository userRepository;
     private final IUserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     public UserServiceImpl(UserRepository userRepository,
-                           IUserMapper userMapper,PasswordEncoder passwordEncoder){
+                           IUserMapper userMapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager){
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -72,4 +78,5 @@ public class UserServiceImpl implements IUserService{
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot found user with id: " + id));
         userRepository.delete(userModel);
     }
+
 }

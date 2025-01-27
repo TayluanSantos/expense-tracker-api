@@ -29,6 +29,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/users/login").permitAll();
                     auth.requestMatchers(HttpMethod.POST,"/users/**").permitAll();
                     auth.requestMatchers("/expenses/**").hasAnyRole("USER","ADMIN");
+                    auth.requestMatchers(HttpMethod.GET,"/categories").permitAll();
                     auth.requestMatchers("/categories/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })

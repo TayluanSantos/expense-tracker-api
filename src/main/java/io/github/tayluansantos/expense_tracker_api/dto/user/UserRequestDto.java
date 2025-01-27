@@ -10,6 +10,7 @@ import java.util.List;
 
 public record UserRequestDto(@NotNull String name,
                              @NotNull @Email String email,
-                             @NotNull @Size(min = 8) String password                            )
+                             @NotNull @Size(min = 8) String password,
+                             List<String> roles)
 
 { }

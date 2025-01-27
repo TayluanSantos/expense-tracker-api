@@ -5,9 +5,8 @@ import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
 import io.github.tayluansantos.expense_tracker_api.exception.EmailAlreadyExistException;
 import io.github.tayluansantos.expense_tracker_api.exception.ResourceNotFoundException;
 import io.github.tayluansantos.expense_tracker_api.mapper.IUserMapper;
-import io.github.tayluansantos.expense_tracker_api.model.User;
+import io.github.tayluansantos.expense_tracker_api.model.UserModel;
 import io.github.tayluansantos.expense_tracker_api.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,32 +33,32 @@ public class UserServiceImpl implements IUserService{
             throw new EmailAlreadyExistException("This email already exist.");
         }
 
-        User user = userMapper.userDtoToUser(userRequest);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        UserModel userModel = userMapper.userDtoToUser(userRequest);
+        userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+        userRepository.save(userModel);
 
-        return userMapper.userToUserDto(user);
+        return userMapper.userToUserDto(userModel);
 
     }
 
     @Override
     public UserResponseDto update(UserRequestDto userRequest, Long id) {
-        User user = userRepository.findById(id)
+        UserModel userModel = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot found user with id: " + id));
-        user.setName(userRequest.name());
-        user.setEmail(userRequest.email());
-        user.setPassword(userRequest.password());
+        userModel.setName(userRequest.name());
+        userModel.setEmail(userRequest.email());
+        userModel.setPassword(userRequest.password());
 
-        userRepository.save(user);
+        userRepository.save(userModel);
 
-        return userMapper.userToUserDto(user);
+        return userMapper.userToUserDto(userModel);
     }
 
     @Override
     public UserResponseDto findById(Long id) {
-        User user = userRepository.findById(id)
+        UserModel userModel = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot found user with id: " + id));
-        return userMapper.userToUserDto(user);
+        return userMapper.userToUserDto(userModel);
     }
 
     @Override
@@ -69,8 +68,8 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public void delete(Long id) {
-        User user = userRepository.findById(id)
+        UserModel userModel = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot found user with id: " + id));
-        userRepository.delete(user);
+        userRepository.delete(userModel);
     }
 }

@@ -1,11 +1,13 @@
 package io.github.tayluansantos.expense_tracker_api.model;
 
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_user")
-public class User {
+public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,7 +31,11 @@ public class User {
     @Size(min = 8)
     private String password;
 
-    @OneToMany (mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    @Type(ListArrayType.class)
+    @Column(name = "user_roles",columnDefinition = "varchar[]")
+    private List<String> roles;
+
+    @OneToMany (mappedBy = "userModel",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses;
 
     public Long getId() {
@@ -70,5 +76,13 @@ public class User {
 
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }

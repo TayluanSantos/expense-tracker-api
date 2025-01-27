@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -36,7 +34,7 @@ public class Expense {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserModel userModel;
 
     @ManyToOne
     private Category category;
@@ -73,12 +71,12 @@ public class Expense {
         this.createdAt = createdAt;
     }
 
-    public User getUser() {
-        return user;
+    public UserModel getUserModel() {
+        return userModel;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
     }
 
     public Category getCategory() {

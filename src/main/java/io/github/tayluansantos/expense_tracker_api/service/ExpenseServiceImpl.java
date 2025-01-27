@@ -6,11 +6,10 @@ import io.github.tayluansantos.expense_tracker_api.exception.ResourceNotFoundExc
 import io.github.tayluansantos.expense_tracker_api.mapper.IExpenseMapper;
 import io.github.tayluansantos.expense_tracker_api.model.Category;
 import io.github.tayluansantos.expense_tracker_api.model.Expense;
-import io.github.tayluansantos.expense_tracker_api.model.User;
+import io.github.tayluansantos.expense_tracker_api.model.UserModel;
 import io.github.tayluansantos.expense_tracker_api.repository.CategoryRepository;
 import io.github.tayluansantos.expense_tracker_api.repository.ExpenseRepository;
 import io.github.tayluansantos.expense_tracker_api.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -56,7 +55,7 @@ public class ExpenseServiceImpl implements IExpenseService{
     @Override
     public ExpenseResponseDto save(ExpenseRequestDto expenseRequest) {
 
-        User user = userRepository.findById(expenseRequest.userId())
+        UserModel userModel = userRepository.findById(expenseRequest.userId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 
         Category category = categoryRepository.findById(expenseRequest.categoryId())
@@ -64,7 +63,7 @@ public class ExpenseServiceImpl implements IExpenseService{
 
         Expense expense = expenseMapper.convertToEntity(expenseRequest);
 
-        expense.setUser(user);
+        expense.setUserModel(userModel);
         expense.setCategory(category);
 
         return expenseMapper.convertToDto(expenseRepository.save(expense));

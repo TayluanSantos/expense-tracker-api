@@ -4,13 +4,14 @@ import io.github.tayluansantos.expense_tracker_api.dto.expense.ExpenseRequestDto
 import io.github.tayluansantos.expense_tracker_api.dto.expense.ExpenseResponseDto;
 import io.github.tayluansantos.expense_tracker_api.model.Expense;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring",uses = {IUserMapper.class,ICategoryMapper.class})
 public interface IExpenseMapper {
 
-    
+    @Mapping(source = "userModel" ,target = "user" )
     ExpenseResponseDto convertToDto(Expense expense);
 
     Expense convertToEntity(ExpenseRequestDto expenseRequestDto);

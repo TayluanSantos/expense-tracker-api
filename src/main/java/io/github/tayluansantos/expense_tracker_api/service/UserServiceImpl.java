@@ -53,7 +53,7 @@ public class UserServiceImpl implements IUserService{
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot found user with id: " + id));
         userModel.setName(userRequest.name());
         userModel.setEmail(userRequest.email());
-        userModel.setPassword(userRequest.password());
+        userModel.setPassword(passwordEncoder.encode(userRequest.password()));
 
         userRepository.save(userModel);
 

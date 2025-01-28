@@ -28,10 +28,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/users/login").permitAll();
+                    auth.requestMatchers("/auth/login").permitAll();
                     auth.requestMatchers(HttpMethod.POST,"/users/register").permitAll();
+                    auth.requestMatchers("/users/**").hasAnyRole("USER","ADMIN");
                     auth.requestMatchers("/expenses/**").hasAnyRole("USER","ADMIN");
-                    auth.requestMatchers(HttpMethod.GET,"/categories").permitAll();
                     auth.requestMatchers("/categories/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })

@@ -5,6 +5,7 @@ import io.github.tayluansantos.expense_tracker_api.exception.ErrorResponse;
 import io.github.tayluansantos.expense_tracker_api.exception.FieldError;
 import io.github.tayluansantos.expense_tracker_api.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,6 +27,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleResourceNotFoundException(ResourceNotFoundException ex){
         return ErrorResponse.defaultMessage(HttpStatus.NOT_FOUND.value(),ex.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleBadCredentialsException(BadCredentialsException ex){
+        return ErrorResponse.defaultMessage(HttpStatus.UNAUTHORIZED.value(),ex.getMessage());
     }
 
     @ExceptionHandler(EmailAlreadyExistException.class)

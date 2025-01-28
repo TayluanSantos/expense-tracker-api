@@ -22,11 +22,9 @@ import java.util.List;
 public class UserController {
 
     private final IUserService userService;
-    private final AuthenticationManager authenticationManager;
 
-    public UserController(IUserService userService, AuthenticationManager authenticationManager){
+    public UserController(IUserService userService){
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
     }
 
     @GetMapping
@@ -53,13 +51,5 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody UserLoginDto userLogin){
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(userLogin.email(), userLogin.password());
-        Authentication authenticate = this.authenticationManager.authenticate(usernamePassword);
-
-        return ResponseEntity.ok().build();
     }
 }

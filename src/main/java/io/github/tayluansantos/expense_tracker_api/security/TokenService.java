@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import io.github.tayluansantos.expense_tracker_api.model.UserModel;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,17 +21,17 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secretKey;
 
-    public String generateToken(UserModel user){
+    public String generateToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
             String token = JWT.create()
                     .withIssuer("expense-tracker-api")
-                    .withSubject(user.getEmail())
+                    .withSubject(user.getUsername())
                     .withExpiresAt(this.generateExpirationDate())
                     .sign(algorithm);
             return token;
         } catch (JWTCreationException exception){
-            throw new RuntimeException("Error to generate token");
+            throw new JWTCreationException("Erro ao gerar token", exception);
         }
     }
 
@@ -42,7 +44,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Token invalid or expired");
+            throw new JWTVerificationException("Token inválido ou expirado", exception);
         }
     }
 

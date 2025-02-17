@@ -8,14 +8,18 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_user")
-public class UserModel {
+public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,12 +35,49 @@ public class UserModel {
     @Size(min = 8)
     private String password;
 
-    @Type(ListArrayType.class)
-    @Column(name = "user_roles",columnDefinition = "varchar[]")
-    private List<String> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @OneToMany (mappedBy = "userModel",cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Type(ListArrayType.class)
+//    @Column(name = "user_roles",columnDefinition = "varchar[]")
+//    private List<String> role;
+
+    @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
 
     public Long getId() {
         return id;
@@ -62,10 +103,6 @@ public class UserModel {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -78,11 +115,11 @@ public class UserModel {
         this.expenses = expenses;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

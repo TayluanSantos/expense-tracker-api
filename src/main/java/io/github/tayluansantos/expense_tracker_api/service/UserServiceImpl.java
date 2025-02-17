@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService{
@@ -35,12 +36,15 @@ public class UserServiceImpl implements IUserService{
     @Override
     public UserResponseDto save(UserRequestDto userRequest) {
 
-        if(userRepository.findByEmail(userRequest.email()) != null) {
+        Optional<UserModel> user = userRepository.findByEmail(userRequest.email());
+
+        if(user.isPresent()){
             throw new EmailAlreadyExistException("This email already exist.");
         }
 
         UserModel userModel = userMapper.userDtoToUser(userRequest);
         userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+        userModel.setRole(userRequest.role());
         userRepository.save(userModel);
 
         return userMapper.userToUserDto(userModel);

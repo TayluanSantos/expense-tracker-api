@@ -31,11 +31,11 @@ public class Category {
         this.id = id;
     }
 
-    public @NotNull @Size(min = 3, max = 50) String getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(@NotNull @Size(min = 3, max = 50) String name) {
+    public void setName(String name) {
         this.name = name;
     }
 

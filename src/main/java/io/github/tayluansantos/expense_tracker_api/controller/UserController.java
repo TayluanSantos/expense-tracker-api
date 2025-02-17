@@ -1,20 +1,14 @@
 package io.github.tayluansantos.expense_tracker_api.controller;
 
-import io.github.tayluansantos.expense_tracker_api.dto.user.UserLoginDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.user.UserResponseDto;
-import io.github.tayluansantos.expense_tracker_api.service.ICategoryService;
 import io.github.tayluansantos.expense_tracker_api.service.IUserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -39,7 +33,9 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserRequestDto userRequest, UriComponentsBuilder uriBuilder){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userRequest));
+        UserResponseDto userResponse = userService.save(userRequest);
+        URI uri = uriBuilder.path("/users/{id}").buildAndExpand(userResponse.id()).toUri();
+        return ResponseEntity.created(uri).body(userResponse);
     }
 
     @PutMapping("/{id}")

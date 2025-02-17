@@ -2,13 +2,10 @@ package io.github.tayluansantos.expense_tracker_api.controller;
 
 import io.github.tayluansantos.expense_tracker_api.dto.expense.ExpenseRequestDto;
 import io.github.tayluansantos.expense_tracker_api.dto.expense.ExpenseResponseDto;
-import io.github.tayluansantos.expense_tracker_api.service.ICategoryService;
 import io.github.tayluansantos.expense_tracker_api.service.IExpenseService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -41,12 +38,9 @@ public class ExpenseController {
     }
 
     @GetMapping("/search-by-date")
-    public ResponseEntity<List<ExpenseResponseDto>> findByDate (@RequestParam("startDate") String startDate,
-                                                                @RequestParam("endDate") String endDate) {
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate);
-
-        return ResponseEntity.status(HttpStatus.OK).body(expenseService.findAllByDateRange(start,end));
+    public ResponseEntity<List<ExpenseResponseDto>> findByDate (@RequestParam("startDate") LocalDate startDate,
+                                                                @RequestParam("endDate") LocalDate endDate) {
+        return ResponseEntity.status(HttpStatus.OK).body(expenseService.findAllByDateRange(startDate,endDate));
     }
 
 

@@ -38,6 +38,8 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/login").permitAll();
+                    auth.requestMatchers("/swagger-ui/**").permitAll();
+                    auth.requestMatchers("/v3/api-docs/**").permitAll();git
                     auth.requestMatchers(HttpMethod.POST,"/users/register").permitAll();
                     auth.requestMatchers("/users/**").hasAnyRole("USER","ADMIN");
                     auth.requestMatchers("/expenses/**").hasAnyRole("USER","ADMIN");

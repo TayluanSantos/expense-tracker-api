@@ -57,9 +57,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailAlreadyExistException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleEmailAlreadyExistException(EmailAlreadyExistException ex){
-        return ErrorResponse.defaultMessage(HttpStatus.BAD_REQUEST.value(),ex.getMessage());
+        return ErrorResponse.defaultMessage(HttpStatus.CONFLICT.value(),ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

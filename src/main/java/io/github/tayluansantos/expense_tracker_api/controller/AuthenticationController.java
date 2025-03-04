@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @Tag(name = "Authentication",description = "Endpoints para a autenticação de usuários.")
 public class AuthenticationController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
@@ -42,16 +46,22 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto userLogin) {
 
+        logger.info("Login attempt for user");
         try {
 
             UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(userLogin.email(), userLogin.password());
+
+            logger.info("Authenticating user");
             Authentication authenticate = this.authenticationManager.authenticate(usernamePassword);
+
             String token = tokenService.generateToken((User) authenticate.getPrincipal());
+            logger.info("User authenticated successfully");
 
             return ResponseEntity.ok().body(new TokenDto(token));
 
         } catch (BadCredentialsException ex) {
-           throw new BadCredentialsException("Invalid or inexisted user");
+            logger.warn("Failed to authenticate user");
+            throw new BadCredentialsException("Invalid or inexisted user");
         }
 
     }

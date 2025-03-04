@@ -34,7 +34,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserResponseDto save(UserRequestDto userRequest) {
-        logger.info("Attempting to create user with email: {}", userRequest.email());
+        logger.info("Attempting to create user");
 
         Optional<UserModel> user = userRepository.findByEmail(userRequest.email());
 
@@ -48,7 +48,7 @@ public class UserServiceImpl implements IUserService {
         userModel.setRole(userRequest.role());
         userRepository.save(userModel);
 
-        logger.info("User created successfully with email: {}", userRequest.email());
+        logger.info("User created successfully");
         return userMapper.userToUserDto(userModel);
     }
 

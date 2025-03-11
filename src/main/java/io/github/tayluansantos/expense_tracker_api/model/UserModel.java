@@ -38,12 +38,15 @@ public class UserModel implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @Type(ListArrayType.class)
-//    @Column(name = "user_roles",columnDefinition = "varchar[]")
-//    private List<String> role;
-
     @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses;
+
+    public UserModel(String name,String email,String password,Role role){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

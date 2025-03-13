@@ -38,14 +38,27 @@ public class UserRepositoryTest {
 
         //Given
         UserModel savedUser = userRepository.save(user);
-        Long userId = savedUser.getId(); // Pegando o ID real gerado
+        Long userId = savedUser.getId(); 
 
         //When
-        UserModel response = userRepository.findById(userId).get();
+        Optional<UserModel> result = userRepository.findById(userId);
 
         //Then
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(savedUser.getId(), response.getId());
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(savedUser.getId(), result.get().getId());
+    }
+
+    @DisplayName("Return empty optional when user not found")
+    @Test
+    void givenInvalidId_WhenFindById_ThenReturnEmpty() {
+        //Given
+        Long invalidId = 999L;
+
+        //When
+        Optional<UserModel> result = userRepository.findById(invalidId);
+
+        //Then
+        Assertions.assertTrue(result.isEmpty());
     }
 
     @DisplayName("Return list of all users")
@@ -68,14 +81,14 @@ public class UserRepositoryTest {
     void givenUserObject_WhenSave_ThenReturnSavedUser() {
 
         //When
-        UserModel response = userRepository.save(user);
+        UserModel result = userRepository.save(user);
 
         //Then
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals("User Test", user.getName());
-        Assertions.assertEquals("usertest@gmail.com", user.getEmail());
-        Assertions.assertEquals("user1234", user.getPassword());
-        Assertions.assertEquals(Role.ROLE_USER, user.getRole());
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("User Test", result.getName());
+        Assertions.assertEquals("usertest@gmail.com", result.getEmail());
+        Assertions.assertEquals("user1234", result.getPassword());
+        Assertions.assertEquals(Role.ROLE_USER, result.getRole());
 
     }
 
@@ -84,16 +97,18 @@ public class UserRepositoryTest {
     void givenUserObject_WhenUpdate_ThenReturnUpdatedUser() {
 
         //Given
+        UserModel savedUser = userRepository.save(user);
         user.setName("User Test - Updated");
 
         //When
-        UserModel response = userRepository.save(user);
+        UserModel result = userRepository.save(user);
 
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals("User Test - Updated", user.getName());
-        Assertions.assertEquals("usertest@gmail.com", user.getEmail());
-        Assertions.assertEquals("user1234", user.getPassword());
-        Assertions.assertEquals(Role.ROLE_USER, user.getRole());
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(savedUser.getId(),result.getId());
+        Assertions.assertEquals("User Test - Updated", result.getName());
+        Assertions.assertEquals("usertest@gmail.com", result.getEmail());
+        Assertions.assertEquals("user1234", result.getPassword());
+        Assertions.assertEquals(Role.ROLE_USER, result.getRole());
 
     }
 

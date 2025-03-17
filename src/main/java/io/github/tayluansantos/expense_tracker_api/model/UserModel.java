@@ -1,13 +1,9 @@
 package io.github.tayluansantos.expense_tracker_api.model;
 
-import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "tb_user")
 public class UserModel implements UserDetails {
@@ -40,6 +34,8 @@ public class UserModel implements UserDetails {
 
     @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses;
+
+    public UserModel(){}
 
     public UserModel(String name,String email,String password,Role role){
         this.name = name;

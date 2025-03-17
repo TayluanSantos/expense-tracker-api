@@ -3,16 +3,12 @@ package io.github.tayluansantos.expense_tracker_api.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Entity
 @Table(name = "tb_expense")
 @EntityListeners(AuditingEntityListener.class)
@@ -22,6 +18,7 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String description;
 
     @NotNull
@@ -38,6 +35,16 @@ public class Expense {
 
     @ManyToOne
     private Category category;
+
+    public Expense(){}
+
+    public Expense(String description, BigDecimal amount, LocalDate createdAt, UserModel userModel, Category category) {
+        this.description = description;
+        this.amount = amount;
+        this.createdAt = createdAt;
+        this.userModel = userModel;
+        this.category = category;
+    }
 
     public Long getId() {
         return id;

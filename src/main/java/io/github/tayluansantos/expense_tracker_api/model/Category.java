@@ -3,14 +3,9 @@ package io.github.tayluansantos.expense_tracker_api.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
 
 @Entity
 @Table(name = "tb_category")
-@AllArgsConstructor
-@NoArgsConstructor
 public class Category {
 
     @Id
@@ -22,6 +17,8 @@ public class Category {
     private String name;
 
     private String description;
+
+    public Category() {}
 
     public Category(String name,String description) {
         this.name = name;

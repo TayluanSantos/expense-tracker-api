@@ -10,6 +10,7 @@ import io.github.tayluansantos.expense_tracker_api.repository.UserRepository;
 import io.github.tayluansantos.expense_tracker_api.security.TokenService;
 import io.github.tayluansantos.expense_tracker_api.service.IUserService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("findAll - Should return status code: 200 OK")
     void findAll() throws Exception {
 
         User user = (User) User.builder()
@@ -104,6 +106,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("findById - Should return status code: 200 OK")
     void findById() throws Exception {
 
         User user = (User) User.builder()
@@ -121,6 +124,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("findById - Should return status code: 201 Created")
     void saveUser() throws Exception {
         UserRequestDto userRequestDto = new UserRequestDto("User Test", EMAIL, PASSWORD, Role.ROLE_USER);
 
@@ -133,6 +137,34 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("update - Should return status code: 200 OK")
+    void updateUser() throws Exception {
+
+        User user = (User) User.builder()
+                .username(EMAIL)
+                .password(PASSWORD)
+                .authorities(new SimpleGrantedAuthority(Role.ROLE_USER.name()))
+                .build();
+
+        String token = tokenService.generateToken(user);
+
+        UserRequestDto userRequestDto = new UserRequestDto("User Test - Update", EMAIL, PASSWORD, Role.ROLE_USER);
+        UserResponseDto userResponseDto = new UserResponseDto(1L,"User Test - Update", null);
+
+        Mockito.when(userService.update(Mockito.any(UserRequestDto.class),Mockito.anyLong())).thenReturn(userResponseDto);
+
+
+        mockMvc.perform(put("/users/{id}",1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertJsonToString(userRequestDto))
+                        .header("Authorization","Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("User Test - Update"));
+    }
+
+    @Test
+    @DisplayName("update - Should return status code: 204 No Content")
     void deleteUser() throws Exception {
         User user = (User) User.builder()
                 .username(EMAIL)
